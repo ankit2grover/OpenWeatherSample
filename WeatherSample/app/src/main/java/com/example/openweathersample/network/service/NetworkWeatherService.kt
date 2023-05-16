@@ -1,6 +1,7 @@
 package com.example.openweathersample.network.service
 
 import com.example.openweathersample.network.RetrofitNetworkClient
+import com.example.openweathersample.network.api.WeatherApi
 
 
 /***
