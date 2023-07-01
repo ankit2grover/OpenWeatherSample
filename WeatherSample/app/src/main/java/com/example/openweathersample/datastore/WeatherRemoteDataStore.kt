@@ -5,23 +5,28 @@ import com.example.openweathersample.network.api.WeatherApi
 import com.example.openweathersample.network.service.WeatherService
 import kotlinx.coroutines.flow.flow
 
-internal class WeatherRemoteDataStore() {
-    internal suspend fun getWeather(weatherRequest: WeatherRequest) = flow<RemoteResult> {
+class WeatherRemoteDataStore {
+
+    internal suspend fun getWeather(weatherRequest: WeatherRequest): TodayWeather? {
         var latLong: LatLong? = null
         weatherRequest.searchQuery?.let {
-           WeatherService.weatherApi.getLatLongByCity(it).firstOrNull()?.also { geocodeCity ->
-               latLong = LatLong(geocodeCity.latitude, geocodeCity.longitude)
-           }
+            WeatherService.weatherApi.getLatLongByCity(it).firstOrNull()?.also { geocodeCity ->
+                latLong = LatLong(geocodeCity.latitude, geocodeCity.longitude)
+            } ?: run{
+                WeatherApiException("Weather Api results are empty")
+            }
+            latLong?.let {
+                return WeatherService.weatherApi.getWeather(it.lat, it.long)
+            }?: run{
+                WeatherApiException("Lat Long is null")
+            }
+        } ?: run{
+            WeatherApiException("Search Query is null")
         }
-        latLong?.let {
-            emit(RemoteResult.Success(WeatherService.weatherApi.getWeather(it.lat, it.long)))
-        }?: run {
-            emit(RemoteResult.Error(WeatherApiException("LatLong fetching failed by city")))
-        }
+        return null
     }
-
 }
 
 
-data class WeatherRequest(val latLong: LatLong?, val searchQuery: String?)
+data class WeatherRequest(val latLong: LatLong? = null, val searchQuery: String? = null)
 data class LatLong(val lat: Double, val long: Double)

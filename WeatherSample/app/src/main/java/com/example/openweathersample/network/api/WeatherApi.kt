@@ -10,7 +10,7 @@ import retrofit2.http.Query
  * We can replace hardcoded values with constants here.
  */
 interface WeatherApi {
-    @GET("onecall")
+    @GET("data/2.5/onecall")
     suspend fun getWeather(
         @Query("lat") latitude: Double,
         @Query("lon") longitude: Double,
@@ -19,6 +19,7 @@ interface WeatherApi {
         @Query("appid") appKey: String? = API_KEY
     ) : TodayWeather
 
+    @GET("geo/1.0/direct")
     suspend fun getLatLongByCity(
         @Query("q") query: String,
         @Query("appid") appKey: String? = API_KEY

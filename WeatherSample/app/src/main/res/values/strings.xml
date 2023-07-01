@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">OpenWeatherSample</string>
+    <string name="weather_app_bar_title">Weather</string>
+    <string name="allow_precise_location">Allow precise location</string>
+    <string name="location_permission_required"> We need location permissions to show your city weather information or search your city in search bar.</string>
+    <string name="enable_location_permissions"> Enable Location Permissions</string>
 </resources>
